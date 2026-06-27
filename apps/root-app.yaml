@@ -5,7 +5,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: root-app
-  namespace: argocd
+  namespace: small-demo
   # Keep the root app from being pruned out from under its children.
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -17,7 +17,7 @@ spec:
     path: apps/child-apps
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: small-demo
   syncPolicy:
     automated:
       prune: true
