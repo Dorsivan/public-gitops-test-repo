@@ -5,7 +5,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: root-app
-  namespace: small-demo
+  # The Application object lives in openshift-gitops (where the OpenShift
+  # GitOps controller watches and the default AppProject permits it). The
+  # workloads it manages still deploy to their own destination namespaces.
+  namespace: openshift-gitops
   # Keep the root app from being pruned out from under its children.
   finalizers:
     - resources-finalizer.argocd.argoproj.io
