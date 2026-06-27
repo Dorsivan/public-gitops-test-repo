@@ -1,0 +1,26 @@
+# Root "app of apps". This single Application's source is the child-apps/
+# directory, which contains nothing but more Argo CD Application manifests.
+# Syncing this one app causes Argo CD to create app-one and app-two.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-app
+  namespace: argocd
+  # Keep the root app from being pruned out from under its children.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Dorsivan/public-gitops-test-repo.git
+    targetRevision: main
+    path: apps/child-apps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

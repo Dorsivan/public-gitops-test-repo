@@ -1,0 +1,24 @@
+# Child Application managed by root-app. Deploys the manifests in
+# manifests/app-two (a single Deployment) into the app-two namespace.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-two
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Dorsivan/public-gitops-test-repo.git
+    targetRevision: main
+    path: manifests/app-two
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: app-two
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,24 @@
+# Child Application managed by root-app. Deploys the manifests in
+# manifests/app-one (a single Deployment) into the app-one namespace.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-one
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Dorsivan/public-gitops-test-repo.git
+    targetRevision: main
+    path: manifests/app-one
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: app-one
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
